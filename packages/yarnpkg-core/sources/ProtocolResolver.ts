@@ -1,14 +1,13 @@
-import semver                                            from 'semver';
-
 import {Resolver, ResolveOptions, MinimalResolveOptions} from './Resolver';
 import * as structUtils                                  from './structUtils';
 import {Descriptor, Locator, DescriptorHash, Package}    from './types';
+import {semverUtils}                                     from '.';
 
 export const TAG_REGEXP = /^(?!v)[a-z0-9-.]+$/i;
 
 export class ProtocolResolver implements Resolver {
   supportsDescriptor(descriptor: Descriptor, opts: MinimalResolveOptions) {
-    if (semver.validRange(descriptor.range))
+    if (semverUtils.getRange(descriptor.range))
       return true;
 
     if (TAG_REGEXP.test(descriptor.range))
@@ -18,7 +17,7 @@ export class ProtocolResolver implements Resolver {
   }
 
   supportsLocator(locator: Locator, opts: MinimalResolveOptions) {
-    if (semver.validRange(locator.reference))
+    if (semverUtils.getRange(locator.reference))
       return true;
 
     if (TAG_REGEXP.test(locator.reference))
